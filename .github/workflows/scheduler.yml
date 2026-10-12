@@ -1,0 +1,28 @@
+name: Bot Calcio Live
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Esegue lo script ogni 5 minuti
+  workflow_dispatch:      # Ti permette di testarlo manualmente quando vuoi
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del codice
+        uses: actions/checkout@v4
+
+      - name: Imposta Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Installa le dipendenze
+        run: pip install requests
+
+      - name: Esegui il bot
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python bot.py
